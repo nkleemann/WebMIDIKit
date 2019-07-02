@@ -44,6 +44,16 @@ public class MIDIPortMap<Value: MIDIPort> : Collection, CustomStringConvertible,
     public func port(with name: String) -> Value? {
         return _content.first { $0.value.displayName == name }?.value
     }
+    
+    /// Return a MIDIPort upon selection on API level
+    /// (Remove the need to use WebMIDIKit in the console
+    /// and allow automation)
+    public final func select(choice: Int) -> Value? {
+        guard let _ = first?.1.type else { print("No ports found"); return nil }
+        
+        let ports = map { $0.1 }
+        return ports[safe: choice]
+    }
 
     /// Prompts the user to select a MIDIPort (non-standard)
     public final func prompt() -> Value? {
